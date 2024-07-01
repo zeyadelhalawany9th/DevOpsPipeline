@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - main
-
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,7 +29,47 @@ jobs:
 
       - name: Package JAR file
         run: mvn package --file ./pom.xml
+deploy:
+    runs-on: ubuntu-latest
 
-      - name: Deploy to a server
+    steps:
+      - name: Checkout repository
+      - uses: actions/checkout@v3
+
+      - name: Deploy to environment
+        run: echo "Deploying to environment"
+        env:
+          ENV_VAR: ${{ secrets.ENV_VAR }}
+        environment: production
+
+      - name: Set up Docker
+        uses: docker/setup-docker@v1
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: docker build -t devops-app-test 
+
+      - name: Push Docker image to Docker Hub
+        run: docker push devops-app-test 
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@canary
+        
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Docker image to Vercel
         run: |
-          # Add your deployment commands here
+          vercel deploy --prebuilt \
+            --prod \
+            --docker \
+            --confirm \
+            --token ${{ secrets.VERCEL_TOKEN }}
+        
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
