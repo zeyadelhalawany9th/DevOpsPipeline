@@ -33,9 +33,6 @@ jobs:
         with:
           name: build-artifacts
           path: target/
-      
-      - name: Copy JAR file to Docker build context
-        run: cp target/devopspipeline-0.0.1-SNAPSHOT.jar Dockerfile .
 
   deploy:
     needs: build
