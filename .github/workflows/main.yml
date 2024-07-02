@@ -75,7 +75,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: devopspipeline-app:latest
+          tags: devopspipeline-app
           context: .
 
       - name: Install Vercel CLI
