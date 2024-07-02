@@ -72,10 +72,7 @@ jobs:
           password: dckr_pat_zCa9dI0xOh9rV0uvX46OtWgRg7w
       
       - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: user/app:latest
+        run: docker buildx build --push --tag user/app:latest .
 
       - name: Install Vercel CLI
         run: npm install --global vercel@canary
