@@ -82,7 +82,10 @@ jobs:
         run: npm install --global vercel@canary
         
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --project=devops-pipeline --environment=production --token=PH3oXMxu3YpzsJ1x0C78Q58R
+        run: vercel pull --yes --token=PH3oXMxu3YpzsJ1x0C78Q58R
+        env:
+          VERCEL_ORG_ID: elezuynBflzwER5AmyVf6L0G
+          VERCEL_PROJECT_ID: prj_oRBWjlZ5yTYFVdx6StZpd4SsozUo
 
       - name: Deploy Docker image to Vercel
         run: |
