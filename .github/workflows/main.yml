@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
+          distribution: 'zulu'
 
       - name: Build with Maven
         run: mvn clean install
@@ -51,7 +52,7 @@ jobs:
         with:
           username: theonlyrou
           password: dckr_pat_zCa9dI0xOh9rV0uvX46OtWgRg7w
-          distribution: 'registry.hub.docker.com'
+      
       -
         name: Build and push
         uses: docker/build-push-action@v6
@@ -63,7 +64,7 @@ jobs:
         run: npm install --global vercel@canary
         
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=production --token=PH3oXMxu3YpzsJ1x0C78Q58R
 
       - name: Deploy Docker image to Vercel
         run: |
