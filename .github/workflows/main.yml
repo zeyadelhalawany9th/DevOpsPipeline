@@ -28,12 +28,24 @@ jobs:
       - name: Package JAR file
         run: mvn package --file ./pom.xml
 
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: target/
+
   deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+          path: target/
 
       - name: Deploy to environment
         run: echo "Deploying to environment"
